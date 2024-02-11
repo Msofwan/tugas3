@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Github User Info</title>
+    
+</head>
+<body>
+    <input id="username" placeholder="Enter GitHub Username"/>
+    <button type="button" id="submit" onclick="submit()">Submit</button>
+    <div id="userInfo">
+        <p><strong>Username:</strong> <span id="userID"></span></p>
+        <img id="userPhoto" src="" alt="User Photo">
+        <p><strong>Follower:</strong> <span id="userFollower"></span></p>
+        <p><strong>Following:</strong> <span id="userFollowing"></span></p>
+        <p><strong>Joined GitHub:</strong> <span id="userJoinDate"></span></p>
+        <p><strong>Last Updated:</strong> <span id="userLastUpdate"></span></p>
+    </div>
+
+    <script>
+        function submit() {
+            var username = document.getElementById('username').value;
+            var link = "https://api.github.com/users/" + username;
+            var JSONtext = '';
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                JSONtext = this.responseText;
+                const JSONobject = JSON.parse(JSONtext);
+                document.getElementById("userID").innerHTML = JSONobject.login;
+                document.getElementById("userPhoto").src = JSONobject.avatar_url;
+                document.getElementById("userFollower").innerHTML = JSONobject.followers;
+                document.getElementById("userFollowing").innerHTML = JSONobject.following;
+                document.getElementById("userJoinDate").innerHTML = new Date(JSONobject.created_at).toLocaleDateString();
+                document.getElementById("userLastUpdate").innerHTML = new Date(JSONobject.updated_at).toLocaleDateString();
+            }
+            xhttp.open("GET", link);
+            xhttp.send();
+        }
+    </script>
+</body>
+</html>
